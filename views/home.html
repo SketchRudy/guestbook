@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook Form</title>
+    <link rel="icon" type="image/png" href="/images/guestbook.svg">
+    <link rel="stylesheet" href="/css/home.css">
+    
+</head>
+<body>
+    <h1>Guestbook Form</h1>
+    <form action="submit_guestbook.php" method="post">
+      <!-- Name Field -->
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+  
+      <!-- Email Field -->
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+  
+      <!-- Message Field -->
+      <div>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+  
+      <!-- Dropdown for Event Type -->
+      <div>
+        <label for="event">Event Type:</label>
+        <select id="event" name="event">
+          <option value="meetup">Meetup</option>
+          <option value="job-fair">Job Fair</option>
+          <option value="conference">Conference</option>
+          <option value="workshop">Workshop</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+  
+      <!-- Submit Button -->
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>    
+</body>
+</html>
