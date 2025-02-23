@@ -2,8 +2,11 @@ import express from  'express';
 
 const app = express();
 
+app.set('view engine', 'ejs');
+
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+
 const orders = []; // In a real app, we'd use a database
 
 app.get('/', (req, res) => {
@@ -27,11 +30,11 @@ app.post('/submit-order', (req, res) => {
     console.log(orders);
     
     // Send confirmation page
-    res.sendFile(`${import.meta.dirname}/views/confirmation.html`);
+    res.render('confirmation', { order });
  });
 
  app.get('/admin/orders', (req, res) => {
-    res.send(orders);
+    res.render('admin', { orders });
 });
 
 

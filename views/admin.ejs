@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="content">
+        <h2>All Orders</h2>
+        <% if (orders.length === 0) { %>
+            <p>No orders yet!</p>
+        <% } else { %>
+            <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <p>Name: <%= order.name%></p>
+                    <p>Email: <%= order.email %></p>
+                    <p>Message: <%= order.message %></p>
+                    <p>Event: <%= order.event %></p>
+                    <p>Time: <%= order.timestamp %></p>
+                    <p>--------------------------------------------------</p>
+                    <!-- ... order details ... -->
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+    <a href="/" class="button">Back to Form</a>
+
+</body>
+</html>
