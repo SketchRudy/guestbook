@@ -1,4 +1,6 @@
 import express from  'express';
+import pool from './db.js';
+import validateForm from './services/validation.js';
 
 const app = express();
 
@@ -7,13 +9,11 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-const orders = []; // In a real app, we'd use a database
-
 app.get('/', (req, res) => {
     res.sendFile(`${import.meta.dirname}/views/home.html`);
 });
 
-app.post('/submit-order', (req, res) => {
+app.post('/submit-order', async (req, res) => {
     // Get form data from request body
     const order = {
        name: req.body.name,
@@ -23,18 +23,33 @@ app.post('/submit-order', (req, res) => {
        timestamp: new Date()
     };
     
-    // Save order to our array
-    orders.push(order);
- 
-    // Log the orders array to the console
-    console.log(orders);
+    const validationResult = validateForm(order); 
+    if (!validationResult.isValid) { 
+        console.log(validationResult.errors); 
+        return res.status(400).render('home', { errors: validationResult.errors, order }); 
+    }
+    try {
+        const sql = `INSERT INTO orders (name, email, message, event, timestamp) VALUES (?, ?, ?, ?, ?)`; 
+        await pool.execute(sql, [order.name, order.email, order.message, order.event, order.timestamp]); 
+        console.log("Order inserted successfully."); // log success
+        res.render('confirmation', { order });
+    } catch (err) {
+        console.error("Error inserting order:", err); //error logging
+        res.status(500).send("Server error: Unable to save your order."); // send error response
+    }
     
     // Send confirmation page
-    res.render('confirmation', { order });
+    // res.render('confirmation', { order });
  });
 
- app.get('/admin/orders', (req, res) => {
-    res.render('admin', { orders });
+ app.get('/admin/orders', async (req, res) => {
+    try {
+        const [orders] = await pool.query('SELECT * FROM orders'); 
+        res.render('admin', { orders });
+    } catch (err) {
+        console.error("Error retrieving orders:", err); // error logging
+        res.status(500).send("Server error: Unable to retrieve orders."); // send error response
+    }
 });
 
 
